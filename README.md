@@ -3,6 +3,21 @@ vagrant-centos
 
 Want a CentOS base box for Vagrant?  Don't want a not-so-fresh feeling about downloading an untrusted one?
 
+
+## Prepare your VirtualBox environment
+
+Before attempting to create your new Vagrant base box, make sure you do the following
+
+- have VirtualBox installed
+- open VirtualBox, go to settings/preferences, choose 'Networking', and add at least one virtual (Host-only) network
+
+That network will be used in step (3) below, where network adapter's name is `vboxnet0` (relevant for `vagrant-centos` file you'll find in this repo). HOSTIP below will most probably be `192.168.56.1` as a default IP of the `vboxnet0`, still it might happen that VirtualBox assigns some other IP address range, so check it out with `ifconfig` in your host OS and pick up your host's computer's IP address for adapter `vboxnet0` there.
+
+_Note: Also, `vagrant-centos` file contains configuration for virtual SATA controller, which has 2 different syntaxes, based on the version of VirtualBox you're running. 2 possible options are both in the file, one of them active, and the other commented-out. See the file and change the active option if your Vagrant base box installation will say it sees no HDD to install to._
+
+
+## Create your CentOS Vagrant base box
+
 Create your own minimal CentOS base box for Vagrant in a few simple steps:
 
 1. download a CentOS minimal ISO from your favorite mirror

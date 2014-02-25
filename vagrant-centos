@@ -2,7 +2,8 @@
 (( $# < 2 )) && { echo "usage: $0 majorversion minorversion"; exit 1; }
 
 vc_osiso="${HOME}/Downloads/CentOS-${1}.${2}-x86_64-minimal.iso"
-vc_guestiso='/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso'
+#vc_guestiso='/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso'
+vc_guestiso="${HOME}/Downloads/VBoxGuestAdditions_4.1.12.iso"
 vc_vboxbase="${HOME}/VirtualBox VMs"
 vc_basebox="vagrant-centos-${1}-${2}"
 vc_hddbase="${vc_vboxbase}/${vc_basebox}/${vc_basebox}"
@@ -23,10 +24,16 @@ VBoxManage modifyvm "$vc_basebox" --ostype RedHat_64 --memory 512 --vram 12 --rt
 VBoxManage storagectl "$vc_basebox" --name ide0 --add ide
 VBoxManage storageattach "$vc_basebox" --storagectl ide0 --device 0 --port 0 --type dvddrive --medium "$vc_osiso"
 VBoxManage storageattach "$vc_basebox" --storagectl ide0 --device 0 --port 1 --type dvddrive --medium "$vc_guestiso"
-VBoxManage storagectl "$vc_basebox" --name sata0 --add sata --portcount 1
+####################################################################################
+# new(er) vs. olr(er) portcount parameter for sata controller
+#VBoxManage storagectl "$vc_basebox" --name sata0 --add sata --portcount 1
+VBoxManage storagectl "$vc_basebox" --name sata0 --add sata --sataportcount 1
+####################################################################################
 VBoxManage createhd --filename "$vc_hddfile" --size 40960
 VBoxManage storageattach "$vc_basebox" --storagectl sata0 --port 0 --type hdd --medium "$vc_hddfile"
 VBoxManage modifyvm "$vc_basebox" --nic1 nat
+VBoxManage modifyvm "$vc_basebox" --nic2 hostonly
+VBoxManage modifyvm "$vc_basebox" --hostonlyadapter2 vboxnet0
 VBoxManage startvm "$vc_basebox"
 
 ruby -rsocket -e 'puts "Kickstart URL: ks=http://" + IPSocket.getaddress(Socket.gethostname) + ":8000/vagrant-centos.ks"'
