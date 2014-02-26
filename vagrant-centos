@@ -3,7 +3,8 @@
 
 vc_osiso="${HOME}/Downloads/CentOS-${1}.${2}-x86_64-minimal.iso"
 #vc_guestiso='/Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso'
-vc_guestiso="${HOME}/Downloads/VBoxGuestAdditions_4.1.12.iso"
+# vc_guestiso="${HOME}/Downloads/VBoxGuestAdditions_4.1.12.iso"
+vc_guestiso="/usr/share/virtualboxVBoxGuestAdditions.iso"
 vc_vboxbase="${HOME}/VirtualBox VMs"
 vc_basebox="vagrant-centos-${1}-${2}"
 vc_hddbase="${vc_vboxbase}/${vc_basebox}/${vc_basebox}"
